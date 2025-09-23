@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.text import slugify
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     profile_picture_url = models.URLField(blank=True, null=True)
@@ -14,6 +15,19 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+
+        if not self.slug:
+            self.slug = slugify(self.name)
+            unique_slug = self.slug
+            counter = 1
+            if Category.objects.filter(slug=unique_slug).exists():
+                unique_slug = f'{self.slug}-{counter}'
+                counter += 1
+            self.slug = unique_slug
+        
+        super().save(*args, **kwargs)
+
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -24,3 +38,16 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="products", blank=True, null=True)
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+
+        if not self.slug:
+            self.slug = slugify(self.name)
+            unique_slug = self.slug
+            counter = 1
+            if Product.objects.filter(slug=unique_slug).exists():
+                unique_slug = f'{self.slug}-{counter}'
+                counter += 1
+            self.slug = unique_slug
+        
+        super().save(*args, **kwargs)

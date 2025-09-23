@@ -36,3 +36,39 @@ This Django project is a backend API for an e-commerce application. It provides 
    python manage.py migrate
    python manage.py runserver
    ```
+
+## API Endpoints
+
+### Product Endpoints
+
+#### Get all products
+**Endpoint:** `GET /product_list`
+
+- **Response:**
+  - Returns a list of all products.
+
+---
+
+#### Get Product Details
+**Endpoint:** `GET /products/<slug:slug>`
+
+- **Parameters:**
+  - `slug`: The unique identifier for a product.
+- **Response:**
+  - JSON object containing product details.
+
+---
+
+#### Get All Categories
+**Endpoint:** `GET /category_list`
+
+- **Response:**
+  - Returns a list of all product categories.
+
+---
+
+#### Get Category Details
+**Endpoint:** `GET /category/<slug:slug>`
+
+- **Response:**
+  - JSON object containing category details.

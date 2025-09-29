@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import  Category, CustomUser, Product
+from .models import  Cart, Category, CustomUser, Product
 from django.contrib.auth.admin import UserAdmin
 
 class CustomUserAdmin(UserAdmin):
@@ -17,3 +17,5 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ["name", "slug"]
 
 admin.site.register(Category, CategoryAdmin)
+
+admin.site.register([Cart])

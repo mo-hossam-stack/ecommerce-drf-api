@@ -42,3 +42,26 @@ def add_to_cart(request):
 
     serializer = CartSerializer(cart)
     return Response(serializer.data)
+
+@api_view(["PUT"])
+def update_cartitem_quantity(request):
+    cartitem_id = request.query_params.get("cartitem_id")
+    quantity = request.query_params.get("quantity")
+
+    if not cartitem_id or not quantity:
+        return Response({"error": "cartitem_id and quantity are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    cartitem = get_object_or_404(CartItem, id=cartitem_id)
+
+    try:
+        quantity = int(quantity)
+    except ValueError:
+        return Response({"error": "Quantity must be an integer"}, status=status.HTTP_400_BAD_REQUEST)
+
+    if quantity <= 0:
+        return Response({"error": "Quantity must be greater than 0"}, status=status.HTTP_400_BAD_REQUEST)
+
+    cartitem.quantity = quantity
+    cartitem.save()
+
+    return Response({"message": "Cart item updated successfully", "cartitem_id": cartitem.id, "quantity": cartitem.quantity}, status=status.HTTP_200_OK)
